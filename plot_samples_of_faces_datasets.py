@@ -47,6 +47,7 @@ def main():
     plt.title('Synthetic images dataset fake image')
     images_samples.set_size_inches((8, 8))
     images_samples.savefig(os.path.join(FIGURES_DIR, 'datasets_samples.png'))
+    # plt.show()
 
 
 if __name__ == "__main__":
