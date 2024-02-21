@@ -73,9 +73,9 @@ class Trainer:
             self.optimizer.step()
             # update the average loss and accuracy
             total_loss += loss.item()
-            nof_samples += self.batch_size
+            nof_samples += train_dataloader.batch_size
             avg_loss = total_loss/nof_samples
-            correct_labeled_samples += (pred.argmax(1) == targets).type(torch.float).sum().item()
+            correct_labeled_samples += (pred.argmax(1) == targets).type(torch.int).sum().item()
             accuracy = correct_labeled_samples/nof_samples * 100
 
             if batch_idx % print_every == 0 or \
@@ -117,9 +117,9 @@ class Trainer:
                 loss = self.criterion(pred, targets)
                 # update the average loss and accuracy
                 total_loss += loss.item()
-                nof_samples += self.batch_size
+                nof_samples += dataloader.batch_size
                 avg_loss = total_loss/nof_samples
-                correct_labeled_samples += (pred.argmax(1) == targets).type(torch.float).sum().item()
+                correct_labeled_samples += (pred.argmax(1) == targets).type(torch.int).sum().item()
                 accuracy = correct_labeled_samples/nof_samples * 100
 
             if batch_idx % print_every == 0 or batch_idx == len(dataloader) - 1:
