@@ -25,14 +25,23 @@ def parse_args():
         Namespace with model name, checkpoint path and dataset name.
     """
     parser = argparse.ArgumentParser(description='Analyze network performance.')
+    # parser.add_argument('--model', '-m',
+    #                     default='XceptionBased', type=str,
+    #                     help='Model name: SimpleNet or XceptionBased.')
+    # parser.add_argument('--checkpoint_path', '-cpp',
+    #                     default='checkpoints/XceptionBased.pt', type=str,
+    #                     help='Path to model checkpoint.')
+    # parser.add_argument('--dataset', '-d',
+    #                     default='fakes_dataset', type=str,
+    #                     help='Dataset: fakes_dataset or synthetic_dataset.')
     parser.add_argument('--model', '-m',
-                        default='XceptionBased', type=str,
+                        default='SimpleNet', type=str,
                         help='Model name: SimpleNet or XceptionBased.')
     parser.add_argument('--checkpoint_path', '-cpp',
-                        default='checkpoints/XceptionBased.pt', type=str,
+                        default='checkpoints/synthetic_dataset_SimpleNet_Adam.pt', type=str,
                         help='Path to model checkpoint.')
     parser.add_argument('--dataset', '-d',
-                        default='fakes_dataset', type=str,
+                        default='synthetic_dataset', type=str,
                         help='Dataset: fakes_dataset or synthetic_dataset.')
 
     return parser.parse_args()
@@ -66,11 +75,13 @@ def get_soft_scores_and_true_labels(dataset, model):
     dataloader = DataLoader(dataset,
                         batch_size=1,
                         shuffle=False)
-    for batch_idx, (inputs, targets) in enumerate(dataloader):
-        pred = model(inputs)
-        all_first_soft_scores.append(np.log(pred[0]))
-        all_second_soft_scores.append(np.log(pred[1]))
-        gt_labels.append(np.log(targets))
+    with torch.no_grad():
+        for batch_idx, (inputs, targets) in enumerate(dataloader):
+            pred = model(inputs)
+            probabilities = torch.softmax(pred, dim=1)
+            all_first_soft_scores.extend(probabilities[:, 0].tolist())
+            all_second_soft_scores.extend(probabilities[:, 1].tolist())
+            gt_labels.extend(targets.tolist())
 
     return (torch.FloatTensor(all_first_soft_scores), torch.FloatTensor(all_second_soft_scores), torch.FloatTensor(gt_labels))
 
