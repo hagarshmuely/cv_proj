@@ -1,0 +1,9 @@
+[
+    {
+        "model": "bonus_model",
+        "dataset": "fakes_dataset",
+        "optimizer": {
+            "name": "SGD",
+            "params": {
+                "params": [
+                    

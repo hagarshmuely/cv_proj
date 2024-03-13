@@ -79,8 +79,8 @@ def get_soft_scores_and_true_labels(dataset, model):
         for batch_idx, (inputs, targets) in enumerate(dataloader):
             pred = model(inputs)
             probabilities = torch.softmax(pred, dim=1)
-            all_first_soft_scores.extend(probabilities[:, 0].tolist())
-            all_second_soft_scores.extend(probabilities[:, 1].tolist())
+            all_first_soft_scores.extend(probabilities[:, 0].tolist())  # real
+            all_second_soft_scores.extend(probabilities[:, 1].tolist())  # fake
             gt_labels.extend(targets.tolist())
 
     return (torch.FloatTensor(all_first_soft_scores), torch.FloatTensor(all_second_soft_scores), torch.FloatTensor(gt_labels))

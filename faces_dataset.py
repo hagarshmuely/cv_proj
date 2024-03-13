@@ -27,22 +27,18 @@ class FacesDataset(Dataset):
     def __getitem__(self, index) -> tuple[torch.Tensor, int]:
         """Get a sample and label from the dataset."""
         """INSERT YOUR CODE HERE, overrun return."""
-        if index < len(self.real_image_names):
-            label = 0  # if index is smaller than real images len, choose real image
-            label_str = 'real'
-        else:
-            label = 1  # if index is equal/larger than real images len, choose fake image
-            label_str = 'fake'
+        with torch.no_grad():
+            if index < len(self.real_image_names):
+                label = 0  # if index is smaller than real images len, choose real image
+                image = Image.open(os.path.join(self.root_path, 'real', self.real_image_names[index]))
+            else:
+                label = 1  # if index is equal/larger than real images len, choose fake image
+                image = Image.open(os.path.join(self.root_path, 'fake', self.fake_image_names[index-len(self.real_image_names)]))
 
-        real_fake_image_names = self.real_image_names + self.fake_image_names  # list concatenation
-        image_name = real_fake_image_names[index]
+            if self.transform is not None:
+                image = self.transform(image)
 
-        image = Image.open(os.path.join(self.root_path, label_str, image_name))
-
-        if self.transform is not None:
-            image = self.transform(image)
-
-        sample = (image, label)
+            sample = (image, label)
 
         return sample
 

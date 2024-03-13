@@ -14,6 +14,7 @@ import torch.nn.functional as F
 import torch.utils.model_zoo as model_zoo
 from torch.nn import init
 import torch
+# from utils import get_nof_params
 
 __all__ = ['xception']
 
@@ -210,6 +211,7 @@ def build_xception_backbone(pretrained=False, **kwargs):
     """
 
     model = Xception(**kwargs)
+    # get_nof_params(model)
     if pretrained:
         model.load_state_dict(model_zoo.load_url(model_urls['xception']))
     return model

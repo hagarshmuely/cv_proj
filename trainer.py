@@ -61,16 +61,12 @@ class Trainer:
 
         for batch_idx, (inputs, targets) in enumerate(train_dataloader):
             """INSERT YOUR CODE HERE."""
-            # zero the gradients
-            self.optimizer.zero_grad()
-            # compute a forward pass
-            pred = self.model(inputs)
-            # compute the loss w.r.t to the criterion
-            loss = self.criterion(pred, targets)
-            # compute a backward pass
-            loss.backward()
-            # step optimizer
-            self.optimizer.step()
+            pred = self.model(inputs)  # compute a forward pass
+            loss = self.criterion(pred, targets)  # compute the loss w.r.t to the criterion
+            loss.backward()  # compute a backward pass
+            self.optimizer.step()  # step optimizer
+            self.optimizer.zero_grad()  # zero the gradients
+
             # update the average loss and accuracy
             total_loss += loss.item()
             nof_samples += train_dataloader.batch_size
@@ -113,8 +109,8 @@ class Trainer:
             # compute a forward pass under a torch.no grad() context manager
             with torch.no_grad():
                 pred = self.model(inputs)
-                # compute the loss w.r.t to the criterion
-                loss = self.criterion(pred, targets)
+                loss = self.criterion(pred, targets)  # compute the loss w.r.t to the criterion
+
                 # update the average loss and accuracy
                 total_loss += loss.item()
                 nof_samples += dataloader.batch_size
