@@ -3,6 +3,7 @@ import torch
 from models import SimpleNet
 import torch.nn as nn
 from torchvision.models import resnet50
+from torchvision.models import resnet18
 # from trainer import write_output
 import torch.optim as optim
 from trainer import LoggingParameters, Trainer
@@ -31,6 +32,13 @@ def bonus_train():
                       validation_dataset=validation_dataset,
                       test_dataset=validation_dataset)
 
+    # optimizer = optim.Adam(model.parameters(), lr=0.001)
+    # trainer = Trainer(model=model, optimizer=optimizer,
+    #                   criterion=nn.CrossEntropyLoss(), batch_size=32,
+    #                   train_dataset=train_dataset,
+    #                   validation_dataset=validation_dataset,
+    #                   test_dataset=validation_dataset)
+
     optimizer_params = optimizer.param_groups[0].copy()
     # remove the parameter values from the optimizer parameters for a cleaner
     # log
@@ -42,7 +50,7 @@ def bonus_train():
                                            optimizer_name='SGD',
                                            optimizer_params=optimizer_params,)
 
-    trainer.run(epochs=1, logging_parameters=logging_parameters)
+    trainer.run(epochs=5, logging_parameters=logging_parameters)
 
 def build_resnet_backbone():
     # initialize your model:
@@ -68,3 +76,7 @@ def my_bonus_model():
 
 if __name__ == "__main__":
     bonus_train()
+
+# python train_main.py -d fakes_dataset -m bonus_model --lr 0.01 -b 16 -e 3 -o SGD
+# python plot_accuracy_and_loss.py -m bonus_model -j out/fakes_dataset_bonus_model_SGD.json -d synthetic_dataset
+

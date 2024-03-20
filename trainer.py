@@ -184,6 +184,10 @@ class Trainer:
         model_filename = f"{logging_parameters.dataset_name}_" \
                          f"{logging_parameters.model_name}_" \
                          f"{logging_parameters.optimizer_name}.pt"
+        # Added!
+        if logging_parameters.model_name == 'bonus_model':
+            model_filename = f"{logging_parameters.model_name}.pt"
+        # Added!
         checkpoint_filename = os.path.join(CHECKPOINT_DIR, model_filename)
         for self.epoch in range(1, epochs + 1):
             print(f'Epoch {self.epoch}/{epochs}')
