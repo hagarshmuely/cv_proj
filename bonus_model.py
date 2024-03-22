@@ -42,7 +42,7 @@ def bonus_train():
                                            optimizer_name='SGD',
                                            optimizer_params=optimizer_params,)
 
-    trainer.run(epochs=5, logging_parameters=logging_parameters)
+    trainer.run(epochs=10, logging_parameters=logging_parameters)
 
 def build_resnet_backbone():
     # initialize your model:
